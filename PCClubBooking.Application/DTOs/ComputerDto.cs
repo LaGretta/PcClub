@@ -6,6 +6,7 @@ public class CreateComputerDto
 {
     public string Name { get; set; } = string.Empty;
     public decimal PricePerHour { get; set; }
+    
     public ComputerCategory Category { get; set; }
 }
 public class UpdateComputerDto
