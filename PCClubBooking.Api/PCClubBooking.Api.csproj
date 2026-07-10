@@ -17,10 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\PCClubBooking.Application\PCClubBooking.Application.csproj" />
       <ProjectReference Include="..\PCClubBooking.Infrastructure\PCClubBooking.Infrastructure.csproj" />
     </ItemGroup>
