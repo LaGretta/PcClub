@@ -17,43 +17,43 @@ public class ComputerController : ControllerBase
    }
 
    [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(CancellationToken ct)
     {
-        var computers = await _service.GetAllComputers();
+        var computers = await _service.GetAllComputers(ct);
         return Ok(computers);
     }
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById(int id , CancellationToken ct)
     {
-        var computer = await _service.GetComputerById(id);
+        var computer = await _service.GetComputerById(id , ct);
         return Ok(computer);
     }
 
     [HttpGet("available")]
-    public async Task<IActionResult> GetAvailable([FromQuery] DateTime start, [FromQuery] DateTime end)
+    public async Task<IActionResult> GetAvailable(CancellationToken ct ,[FromQuery] DateTime start, [FromQuery] DateTime end)
     {
-        var computers = await _service.GetAvailableComputers(start, end);
+        var computers = await _service.GetAvailableComputers(start, end , ct);
         return Ok(computers);
     }
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Create([FromBody] CreateComputerDto dto)
+    public async Task<IActionResult> Create([FromBody] CreateComputerDto dto , CancellationToken ct)
     {
-        await _service.CreateComputer(dto);
+        await _service.CreateComputer(dto , ct);
         return Ok();
     }
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Update(int id, [FromBody] UpdateComputerDto dto)
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateComputerDto dto , CancellationToken ct)
     {
-        await _service.UpdateComputerById(dto, id);
+        await _service.UpdateComputerById(dto, id ,ct);
         return Ok();
     }
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id , CancellationToken ct)
     {
-        await _service.DeleteComputerById(id);
+        await _service.DeleteComputerById(id , ct);
         return NoContent();
     }
 }

@@ -12,17 +12,17 @@ public class PromotionRepository : IPromotionRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<List<Promotion>> GetAllPromotionsAsync()
-        => await _dbContext.Promotions.ToListAsync();
+    public async Task<List<Promotion>> GetAllPromotionsAsync(CancellationToken ct)
+        => await _dbContext.Promotions.ToListAsync(ct);
     
-    public async Task<Promotion?> GetPromotionByIdAsync(int id)
+    public async Task<Promotion?> GetPromotionByIdAsync(int id , CancellationToken ct)
     {
-         var find = await  _dbContext.Promotions.FirstOrDefaultAsync(p => p.Id == id);
+         var find = await  _dbContext.Promotions.FirstOrDefaultAsync(p => p.Id == id , ct);
          return find;
     }
-    public async Task CreatePromotionAsync(Promotion promotion)
+    public async Task CreatePromotionAsync(Promotion promotion , CancellationToken ct)
     {
-         await _dbContext.Promotions.AddAsync(promotion);
+         await _dbContext.Promotions.AddAsync(promotion ,ct);
     }
     public Task UpdatePromotionAsync(Promotion promotion)
     {

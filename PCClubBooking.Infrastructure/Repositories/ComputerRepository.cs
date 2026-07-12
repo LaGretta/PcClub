@@ -15,17 +15,17 @@ public class ComputerRepository : IComputerRepository
         _dbContext = dbContext;
     }
 
-    public async Task<List<Computer>> GetAllComputers()
-        => await _dbContext.Computers.ToListAsync();
+    public async Task<List<Computer>> GetAllComputers(CancellationToken ct)
+        => await _dbContext.Computers.ToListAsync(ct);
     
-    public async Task<Computer?> GetComputerById(int id)
+    public async Task<Computer?> GetComputerById(int id , CancellationToken ct)
     {
         return await _dbContext.Computers
             .Include(c => c.Devices)                    
-            .FirstOrDefaultAsync(c => c.Id == id);
+            .FirstOrDefaultAsync(c => c.Id == id , ct);
     }
 
-    public async Task<List<Computer>> GetAvailableComputers(DateTime start, DateTime end)
+    public async Task<List<Computer>> GetAvailableComputers(DateTime start, DateTime end , CancellationToken ct )
     {
         return await _dbContext.Computers               
             .Where(c => c.IsWorking)                        
@@ -34,15 +34,15 @@ public class ComputerRepository : IComputerRepository
                 && b.Status == BookingStatus.Active
                 && b.StartTime < end
                 && b.EndTime > start))                         
-            .ToListAsync();
+            .ToListAsync(ct);
     }
-    public async Task CreateComputer(Computer computer)
+    public async Task CreateComputer(Computer computer , CancellationToken ct)
     {
-         await _dbContext.Computers.AddAsync(computer);
+         await _dbContext.Computers.AddAsync(computer , ct);
     }
     public Task UpdateComputer(Computer computer)
     {
-        _dbContext.Remove(computer);
+        _dbContext.Update(computer);
         return Task.CompletedTask;
     }
     public void DeleteComputer(Computer computer)

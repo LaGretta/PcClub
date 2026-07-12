@@ -13,17 +13,17 @@ public class DeviceRepository : IDeviceRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<List<Device>> GetDevicesByComputerId(int computerId)
-        => await _dbContext.Devices.Where(n => n.ComputerId == computerId).ToListAsync();
+    public async Task<List<Device>> GetDevicesByComputerId(int computerId , CancellationToken ct)
+        => await _dbContext.Devices.Where(n => n.ComputerId == computerId ).ToListAsync(ct);
     
-    public async Task<Device?> GetDeviceById(int id)
+    public async Task<Device?> GetDeviceById(int id , CancellationToken ct)
     {
-        var find = await _dbContext.Devices.FirstOrDefaultAsync(n => n.Id == id);
+        var find = await _dbContext.Devices.FirstOrDefaultAsync(n => n.Id == id ,ct );
         return find;
     }
-    public async Task AddDevice(Device device)
+    public async Task AddDevice(Device device , CancellationToken ct)
     {
-         await _dbContext.AddAsync(device);
+         await _dbContext.AddAsync(device ,ct);
     }
     public Task UpdateDevice(Device device)
     {

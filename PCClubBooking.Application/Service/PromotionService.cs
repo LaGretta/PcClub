@@ -22,39 +22,39 @@ public class PromotionService : IPromotionService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<List<PromotionResponseDto>> GetAllPromotions()
+    public async Task<List<PromotionResponseDto>> GetAllPromotions(CancellationToken ct)
     {
-        var all = await _promotionRepository.GetAllPromotionsAsync();
+        var all = await _promotionRepository.GetAllPromotionsAsync(ct);
         return _mapper.Map<List<PromotionResponseDto>>(all);
     }
-    public async Task<PromotionResponseDto?> GetPromotionById(int id)
+    public async Task<PromotionResponseDto?> GetPromotionById(int id , CancellationToken ct)
     {
-        var find = await  _promotionRepository.GetPromotionByIdAsync(id);
+        var find = await  _promotionRepository.GetPromotionByIdAsync(id , ct);
         if (find == null)
             throw new KeyNotFoundException($"Promotion with id {id} not found");
         return _mapper.Map<PromotionResponseDto>(find);
     }
-    public async Task CreatePromotion(CreatePromotionDto createPromotionDto)
+    public async Task CreatePromotion(CreatePromotionDto createPromotionDto , CancellationToken ct)
     {
         var promotion = _mapper.Map<Promotion>(createPromotionDto);
-        await _promotionRepository.CreatePromotionAsync(promotion);
-        await _unitOfWork.SaveChangesAsync();
+        await _promotionRepository.CreatePromotionAsync(promotion , ct);
+        await _unitOfWork.SaveChangesAsync(ct);
     }
-    public async Task UpdatePromotionById(UpdatePromotionDto updatePromotionDto, int id)
+    public async Task UpdatePromotionById(UpdatePromotionDto updatePromotionDto, int id , CancellationToken ct)
     {
-        var find = await _promotionRepository.GetPromotionByIdAsync(id);
+        var find = await _promotionRepository.GetPromotionByIdAsync(id , ct);
         if (find == null)
             throw new KeyNotFoundException($"Promotion with id {id} not found");
         _mapper.Map(updatePromotionDto, find);
         await _promotionRepository.UpdatePromotionAsync(find);
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync(ct);
     }
-    public async Task DeletePromotionById(int id)
+    public async Task DeletePromotionById(int id , CancellationToken ct)
     {
-        var find = await _promotionRepository.GetPromotionByIdAsync(id);
+        var find = await _promotionRepository.GetPromotionByIdAsync(id , ct);
         if (find == null)
             throw new KeyNotFoundException($"Promotion with id {id} not found");
         _promotionRepository.DeletePromotionById(find);
-        await _unitOfWork.SaveChangesAsync(); 
+        await _unitOfWork.SaveChangesAsync(ct); 
     }
 }

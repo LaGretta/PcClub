@@ -21,40 +21,40 @@ public class BookingController : ControllerBase
         => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateBookingDto dto)
+    public async Task<IActionResult> Create([FromBody] CreateBookingDto dto , CancellationToken ct)
     {
         var userId = GetUserId();
-        var booking = await _bookingService.CreateBooking(dto, userId);
+        var booking = await _bookingService.CreateBooking(dto, userId , ct);
         return Ok(booking);
     }
 
     [HttpGet("my")]
-    public async Task<IActionResult> GetMy()
+    public async Task<IActionResult> GetMy(CancellationToken ct)
     {
         var userId = GetUserId();
-        var bookings = await _bookingService.GetAllMyBookings(userId);
+        var bookings = await _bookingService.GetAllMyBookings(userId , ct);
         return Ok(bookings);
     }
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById(int id , CancellationToken ct)
     {
-        var booking = await _bookingService.GetBookingById(id);
+        var booking = await _bookingService.GetBookingById(id , ct);
         return Ok(booking);
     }
 
     [HttpPost("{id:int}/cancel")]
-    public async Task<IActionResult> Cancel(int id)
+    public async Task<IActionResult> Cancel(int id , CancellationToken ct)
     {
         var userId = GetUserId();
-        var booking = await _bookingService.CancelBooking(id, userId);
+        var booking = await _bookingService.CancelBooking(id, userId , ct);
         return Ok(booking);
     }
 
     [HttpGet]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    public async Task<IActionResult> GetAll(CancellationToken ct, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
-        var result = await _bookingService.GetAllBookings(page, pageSize);
+        var result = await _bookingService.GetAllBookings(page, pageSize ,  ct);
         return Ok(result);
     }
 }

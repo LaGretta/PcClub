@@ -24,38 +24,38 @@ public class DeviceService : IDeviceService
         _unitOfWork = unitOfWork;
         _computerRepository = computerRepository;
     }
-    public async Task<List<DeviceResponseDto>> GetDevicesByComputerId(int computerId)
+    public async Task<List<DeviceResponseDto>> GetDevicesByComputerId(int computerId , CancellationToken ct)
     {
-        var find = await _computerRepository.GetComputerById(computerId);
+        var find = await _computerRepository.GetComputerById(computerId , ct);
         if (find == null)
             throw new KeyNotFoundException("Computer not found");
         return _mapper.Map<List<DeviceResponseDto>>(find.Devices);
     }
-    public async Task AddDeviceToPc(CreateDeviceDto createDeviceDto, int computerId)
+    public async Task AddDeviceToPc(CreateDeviceDto createDeviceDto, int computerId , CancellationToken ct)
     {
-        var findPc = await _computerRepository.GetComputerById(computerId);
+        var findPc = await _computerRepository.GetComputerById(computerId , ct);
         if(findPc == null)
             throw new KeyNotFoundException("Computer not found");
         var add = _mapper.Map<Device>(createDeviceDto);
         findPc.Devices.Add(add);
         await _computerRepository.UpdateComputer(findPc);
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync(ct);
     }
-    public async Task UpdateDeviceById(UpdateDeviceDto updateDeviceDto, int id)
+    public async Task UpdateDeviceById(UpdateDeviceDto updateDeviceDto, int id , CancellationToken ct)
     {
-        var device = await _deviceRepository.GetDeviceById(id); 
+        var device = await _deviceRepository.GetDeviceById(id ,ct); 
         if (device == null)
             throw new KeyNotFoundException("Device not found");
         _mapper.Map(updateDeviceDto, device);                     
         await _deviceRepository.UpdateDevice(device);
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync(ct);
     }
-    public async Task DeleteDeviceFromPc(int id)
+    public async Task DeleteDeviceFromPc(int id , CancellationToken ct)
     {
-        var device = await _deviceRepository.GetDeviceById(id);   
+        var device = await _deviceRepository.GetDeviceById(id ,ct);   
         if (device == null)                                       
             throw new KeyNotFoundException("Device not found");
         _deviceRepository.DeleteDevice(device);                
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync(ct);
     }
 }

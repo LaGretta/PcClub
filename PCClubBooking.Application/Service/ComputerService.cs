@@ -22,44 +22,44 @@ public class ComputerService : IComputerService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<List<ComputerResponseDto>> GetAllComputers()
+    public async Task<List<ComputerResponseDto>> GetAllComputers(CancellationToken ct)
     {
-         var find = await _computerRepository.GetAllComputers();
+         var find = await _computerRepository.GetAllComputers(ct);
          return _mapper.Map<List<ComputerResponseDto>>(find);
     }
-    public async Task<ComputerResponseDto?> GetComputerById(int id)
+    public async Task<ComputerResponseDto?> GetComputerById(int id , CancellationToken ct)
     {
-         var get = await _computerRepository.GetComputerById(id);
+         var get = await _computerRepository.GetComputerById(id ,ct);
          if(get == null)
              throw new KeyNotFoundException("Computer not found");
          return _mapper.Map<ComputerResponseDto>(get);
     }
-    public async Task<List<ComputerResponseDto>> GetAvailableComputers(DateTime start, DateTime end)
+    public async Task<List<ComputerResponseDto>> GetAvailableComputers(DateTime start, DateTime end , CancellationToken ct)
     {
-         var computers = await _computerRepository.GetAvailableComputers(start, end); 
+         var computers = await _computerRepository.GetAvailableComputers(start, end , ct); 
          return _mapper.Map<List<ComputerResponseDto>>(computers);
     }
-    public async Task CreateComputer(CreateComputerDto createComputerDto)
+    public async Task CreateComputer(CreateComputerDto createComputerDto , CancellationToken ct)
     {
         var computer = _mapper.Map<Computer>(createComputerDto);
-        await _computerRepository.CreateComputer(computer);
-        await _unitOfWork.SaveChangesAsync();
+        await _computerRepository.CreateComputer(computer , ct);
+        await _unitOfWork.SaveChangesAsync(ct);
     }
-    public async Task UpdateComputerById(UpdateComputerDto updateComputerDto, int id)
+    public async Task UpdateComputerById(UpdateComputerDto updateComputerDto, int id , CancellationToken ct)
     {
-        var findpc = await _computerRepository.GetComputerById(id);
+        var findpc = await _computerRepository.GetComputerById(id , ct);
         if(findpc == null)
             throw new KeyNotFoundException("Computer not found");
         _mapper.Map(updateComputerDto, findpc);
         await _computerRepository.UpdateComputer(findpc);
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync(ct);
     }
-    public async Task DeleteComputerById(int id)
+    public async Task DeleteComputerById(int id , CancellationToken ct)
     {
-         var findpc = await _computerRepository.GetComputerById(id);
+         var findpc = await _computerRepository.GetComputerById(id , ct);
          if (findpc == null)
              throw new KeyNotFoundException("Computer not found");
          _computerRepository.DeleteComputer(findpc);
-         await _unitOfWork.SaveChangesAsync();
+         await _unitOfWork.SaveChangesAsync(ct);
     }
 }

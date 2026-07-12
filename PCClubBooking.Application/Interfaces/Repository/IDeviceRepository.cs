@@ -4,9 +4,9 @@ namespace PCClubBooking.Application.Interfaces.Repository;
 
 public interface IDeviceRepository
 {
-    Task<List<Device>> GetDevicesByComputerId(int computerId);   
-    Task<Device?> GetDeviceById(int id);                          
-    Task AddDevice(Device device);
+    Task<List<Device>> GetDevicesByComputerId(int computerId , CancellationToken ct);  
+    Task<Device?> GetDeviceById(int id , CancellationToken ct);                          
+    Task AddDevice(Device device , CancellationToken ct);
     Task UpdateDevice(Device device);
     void DeleteDevice(Device device);
 }
