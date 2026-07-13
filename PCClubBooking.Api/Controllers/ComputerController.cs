@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PCClubBooking.Application.Common;
 using PCClubBooking.Application.DTOs;
 using PCClubBooking.Application.Interfaces.Repository;
 using PCClubBooking.Application.Interfaces.Service;
@@ -36,21 +37,21 @@ public class ComputerController : ControllerBase
         return Ok(computers);
     }
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Create([FromBody] CreateComputerDto dto , CancellationToken ct)
     {
         await _service.CreateComputer(dto , ct);
         return Ok();
     }
     [HttpPut("{id}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateComputerDto dto , CancellationToken ct)
     {
         await _service.UpdateComputerById(dto, id ,ct);
         return Ok();
     }
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Delete(int id , CancellationToken ct)
     {
         await _service.DeleteComputerById(id , ct);

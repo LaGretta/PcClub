@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PCClubBooking.Application.Common;
 using PCClubBooking.Application.DTOs;
 using PCClubBooking.Application.Interfaces.Service;
 
@@ -23,7 +24,7 @@ public class DeviceController : ControllerBase
     }
 
     [HttpPost("computers/{computerId:int}/devices")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Add(int computerId, [FromBody] CreateDeviceDto dto , CancellationToken ct)
     {
         await _deviceService.AddDeviceToPc(dto, computerId , ct);
@@ -31,7 +32,7 @@ public class DeviceController : ControllerBase
     }
 
     [HttpPut("devices/{id:int}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateDeviceDto dto , CancellationToken ct)
     {
         await _deviceService.UpdateDeviceById(dto, id ,ct);
@@ -39,7 +40,7 @@ public class DeviceController : ControllerBase
     }
 
     [HttpDelete("devices/{id:int}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Delete(int id , CancellationToken ct)
     {
         await _deviceService.DeleteDeviceFromPc(id , ct);

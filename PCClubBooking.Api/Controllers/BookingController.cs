@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PCClubBooking.Application.DTOs;
 using PCClubBooking.Application.Interfaces.Service;
+using PCClubBooking.Application.Common;
 
 namespace PCClubBooking.Api.Controllers;
 
@@ -51,7 +52,7 @@ public class BookingController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> GetAll(CancellationToken ct, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
         var result = await _bookingService.GetAllBookings(page, pageSize ,  ct);
