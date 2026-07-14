@@ -1,10 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,8 +24,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PCClubBooking.Application\PCClubBooking.Application.csproj" />
-      <ProjectReference Include="..\PCClubBooking.Domain\PCClubBooking.Domain.csproj" />
+        <ProjectReference Include="..\PCClubBooking.Application\PCClubBooking.Application.csproj" />
+        <ProjectReference Include="..\PCClubBooking.Domain\PCClubBooking.Domain.csproj" />
+        <ProjectReference Include="..\PCClubBooking.Infrastructure\PCClubBooking.Infrastructure.csproj" />
+        <ProjectReference Include="..\PCClubBooking.Api\PCClubBooking.Api.csproj" />
     </ItemGroup>
 
 </Project>
