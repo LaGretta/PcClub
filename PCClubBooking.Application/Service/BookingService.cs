@@ -68,6 +68,8 @@ public class BookingService : IBookingService
     public async Task<ResponseBookingDto> GetBookingById(int bookingId ,CancellationToken ct)
     {
         var find = await _bookingRepository.GetBookingById(bookingId ,ct);
+        if (find == null)
+            throw new KeyNotFoundException("Booking not found");
         return _mapper.Map<ResponseBookingDto>(find);
     }
 
